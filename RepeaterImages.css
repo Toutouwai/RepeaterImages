@@ -13,6 +13,10 @@
       display: inline-block;
       width: auto;
       margin: 0 9px 9px 0; }
+      .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed.InputfieldRepeaterUnpublished > .InputfieldHeader {
+        background: #d9e1ea; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed.InputfieldRepeaterUnpublished > .InputfieldHeader > .repeater-image-thumb {
+          opacity: 0.3; }
       .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader {
         background: #fff;
         padding: 6px;

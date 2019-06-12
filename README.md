@@ -21,7 +21,9 @@ When Repeater Images is enabled for a Repeater field the module changes the appe
 
 * Tick the "Activate Repeater Images for this Repeater field" checkbox.
 * In the "Image field within Repeater" dropdown select the single image field. You must save the Repeater field settings to see any newly added Image fields in the dropdown.
-* Adjust the image thumbnail height if you want (unlike the core Images field there is no slider to change thumbnail height within Page Edit). 
+* Adjust the image thumbnail height if you want (unlike the core Images field there is no slider to change thumbnail height within Page Edit).
+
+Note: the depth option for Repeater fields is not compatible with the Repeater Images module. 
 
 ### Image uploads feature
 
