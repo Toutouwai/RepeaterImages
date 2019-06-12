@@ -23,7 +23,7 @@ class RepeaterImages extends WireData implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Repeater Images',
-			'summary' => 'Adds the option to modify Repeater fields to make them suitable for "page-per-image" usage.',
+			'summary' => 'Adds options to modify Repeater fields to make them convenient for "page-per-image" usage.',
 			'version' => '0.1.0',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/RepeaterImages',
@@ -38,7 +38,7 @@ class RepeaterImages extends WireData implements Module {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->default_thumbnail_height = 170;
+		$this->default_thumbnail_height = 160;
 	}
 
 	/**
@@ -199,7 +199,7 @@ class RepeaterImages extends WireData implements Module {
 		$f = $modules->InputfieldCheckbox;
 		$f_name = 'repeater_images';
 		$f->name = $f_name;
-		$f->label = $this->_('Activate RepeaterImages for this Repeater field');
+		$f->label = $this->_('Activate Repeater Images for this Repeater field');
 		$f->checked = $field->$f_name === 1 ? 'checked' : '';
 		$f->columnWidth = 33;
 		$fs->add($f);
@@ -242,7 +242,7 @@ class RepeaterImages extends WireData implements Module {
 		$f->name = $f_name;
 		$f->label = $this->_('Activate image uploads to Repeater items feature');
 		$f->label2 = $this->_('Activate image uploads');
-		$f->description = $this->_('To use this feature you must add the image field selected above to the template of the page containing the RepeaterImages field - immediately above or below the RepeaterImages field would be a good position. Then when this feature is activated each image uploaded to the field will be added as a new Repeater item to the RepeaterImages field when the page is saved, and all images will be deleted from the upload field.');
+		$f->description = $this->_('To use this feature you must add the image field selected above to the template of the page containing the Repeater Images field - immediately above or below the Repeater Images field would be a good position. Then when this feature is activated each image uploaded to the field will be added as a new Repeater item to the Repeater Images field when the page is saved, and all images will be deleted from the upload field.');
 		$f->checked = $field->$f_name === 1 ? 'checked' : '';
 		$f->showIf = 'repeater_images=1';
 		$fs->add($f);
