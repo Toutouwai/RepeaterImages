@@ -4,6 +4,8 @@ A module for ProcessWire CMS/CMF. Adds options to modify Repeater fields to make
 
 When Repeater Images is enabled for a Repeater field the module changes the appearance of the Repeater inputfield to be similar (but not identical) to an Images field. The collapsed view shows a thumbnail for each Repeater item, and items can be expanded for field editing.
 
+Requires ProcessWire >= v3.0.115.
+
 ## Screencast
 
 ![Repeater Images screencast](https://user-images.githubusercontent.com/1538852/59389850-98034100-8dc3-11e9-8810-1296a4baf318.gif)
