@@ -1,0 +1,97 @@
+.RepeaterImages > .InputfieldContent > .Inputfields {
+  margin: 0 -9px 11px 0 !important; }
+  .RepeaterImages > .InputfieldContent > .Inputfields .ui-sortable-placeholder {
+    visibility: visible !important;
+    background: transparent;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px #d9e1ea; }
+  .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem {
+    margin: 1px 10px 10px 1px; }
+    .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem .InputfieldRepeaterDrag {
+      display: none; }
+    .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed {
+      display: inline-block;
+      width: auto;
+      margin: 0 9px 9px 0; }
+      .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader {
+        background: #fff;
+        padding: 6px;
+        border: 1px solid #d9e1ea;
+        border-radius: 2px;
+        position: relative;
+        opacity: 1;
+        outline: none; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader:hover > .InputfieldRepeaterItemControls .InputfieldRepeaterTrash {
+          display: block !important; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader:hover > .InputfieldRepeaterDrag {
+          display: block; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader:after {
+          content: none; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader.ui-state-error {
+          background: #e83561; }
+          .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader.ui-state-error > .InputfieldRepeaterItemControls .InputfieldRepeaterTrash {
+            display: block !important;
+            background: #e83561;
+            color: #fff; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader > .InputfieldRepeaterItemControls {
+          position: absolute;
+          right: 6px;
+          top: 6px;
+          z-index: 2;
+          height: auto !important;
+          margin: 0;
+          padding: 0; }
+          .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader > .InputfieldRepeaterItemControls i {
+            display: none !important; }
+            .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader > .InputfieldRepeaterItemControls i.InputfieldRepeaterTrash {
+              color: #aaaaaa;
+              width: 32px;
+              height: 32px;
+              background: #fff;
+              text-align: center;
+              padding: 7px 0 0; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader > .InputfieldRepeaterDrag {
+          position: absolute;
+          left: 6px;
+          top: 6px;
+          z-index: 2;
+          color: #aaaaaa;
+          width: 32px;
+          height: 32px;
+          background: #fff;
+          opacity: 1;
+          padding: 7px 0 0; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader .repeater-image-thumb {
+          display: block;
+          background-image: linear-gradient(45deg, #cbcbcb 25%, transparent 25%, transparent 75%, #cbcbcb 75%, #cbcbcb), linear-gradient(45deg, #cbcbcb 25%, transparent 25%, transparent 75%, #cbcbcb 75%, #cbcbcb);
+          background-size: 16px 16px;
+          background-position: 0 0, 8px 8px; }
+          .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader .repeater-image-thumb img {
+            width: auto; }
+        .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader .repeater-image-label {
+          display: block;
+          position: absolute;
+          z-index: 1;
+          left: 6px;
+          right: 6px;
+          top: 6px;
+          bottom: 6px;
+          background: rgba(62, 185, 152, 0.7);
+          opacity: 0; }
+          .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader .repeater-image-label:hover {
+            opacity: 1; }
+          .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem.InputfieldStateCollapsed > .InputfieldHeader .repeater-image-label .InputfieldRepeaterItemLabel {
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.2;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%); }
+    .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem .repeater-image-thumb {
+      display: none; }
+    .RepeaterImages > .InputfieldContent > .Inputfields > .InputfieldRepeaterItem > .InputfieldHeader > .InputfieldRepeaterItemControls {
+      background: none !important; }
+
+/*# sourceMappingURL=RepeaterImages.css.map */

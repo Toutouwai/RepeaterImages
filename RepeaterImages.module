@@ -1,0 +1,254 @@
+<?php namespace ProcessWire;
+
+/**
+ *
+ * Repeater Images
+ *
+ * @author Robin Sallis
+ *
+ * ProcessWire 3.x
+ * Copyright (C) 2011 by Ryan Cramer
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ *
+ * http://www.processwire.com
+ * http://www.ryancramer.com
+ *
+ */
+
+class RepeaterImages extends WireData implements Module {
+
+	/**
+	 * Module information
+	 */
+	public static function getModuleInfo() {
+		return array(
+			'title' => 'Repeater Images',
+			'summary' => 'Adds the option to modify Repeater fields to make them suitable for "page-per-image" usage.',
+			'version' => '0.1.0',
+			'author' => 'Robin Sallis',
+			'href' => 'https://github.com/Toutouwai/RepeaterImages',
+			'icon' => 'picture-o',
+			'autoload' => 'template=admin',
+			'requires' => 'ProcessWire>=3.0.115',
+		);
+	}
+
+	/**
+	 * Construct
+	 */
+	public function __construct() {
+		parent::__construct();
+		$this->default_thumbnail_height = 170;
+	}
+
+	/**
+	 * Ready
+	 */
+	public function init() {
+		$this->addHookAfter('InputfieldRepeater::renderReadyHook', $this, 'afterRenderReady');
+		$this->addHookBefore('InputfieldRepeater::render', $this, 'modifyRepeaterInputfield');
+		$this->addHookAfter('Field(type=FieldtypeImage)::getInputfield', $this, 'modifyImageInputfield');
+		$this->addHookAfter('Pages::saveReady', $this, 'beforePageSave');
+		$this->addHookAfter('FieldtypeRepeater::getConfigInputfields', $this, 'addConfigInputfields');
+	}
+
+	/**
+	 * After InputfieldRepeater renderReady
+	 *
+	 * @param HookEvent $event
+	 */
+	protected function afterRenderReady(HookEvent $event) {
+
+		/* @var InputfieldRepeater $inputfield */
+		$inputfield = $event->object;
+		$field = $inputfield->hasField;
+		if(!$field || !$field->repeater_images) return;
+
+		// Show error if depth option enabled
+		if($field->repeaterDepth && $field->repeater_images) {
+			$this->error($this->_('The Repeater depth option is not compatible with Repeater Images. Please disable one or the other.'));
+		}
+
+		// Add file assets
+		$config = $this->wire('config');
+		$info = $this->getModuleInfo();
+		$version = $info['version'];
+		$config->styles->add($config->urls->{$this} . "{$this}.css?v={$version}");
+		$config->scripts->add($config->urls->{$this} . "{$this}.js?v={$version}");
+
+	}
+
+	/**
+	 * Modify Repeater inputfield
+	 *
+	 * @param HookEvent $event
+	 */
+	protected function modifyRepeaterInputfield(HookEvent $event) {
+
+		/* @var InputfieldRepeater $inputfield */
+		$inputfield = $event->object;
+		$field = $inputfield->hasField;
+		if(!$field || !$field->repeater_images || !$field->ri_image_field) return;
+		$image_field = $this->wire('fields')->get($field->ri_image_field);
+		if(!$image_field) return;
+		$inputfield->addClass('RepeaterImages', 'wrapClass');
+
+		$this->wire()->addHookBefore('InputfieldFieldset::render', function(HookEvent $event) use ($field, $image_field) {
+			/* @var InputfieldFieldset $fieldset */
+			$fieldset = $event->object;
+			// Return if this is not a Repeater item
+			if(strpos($fieldset->name, 'repeater_item_') !== 0) return;
+			// Get Repeater page ID from item name
+			$page_id = (int) substr($fieldset->name, 14);
+			// Get Repeater page
+			/* @var RepeaterPage $r_page */
+			$r_page = $this->wire('pages')->get($page_id);
+			// Make sure this Repeater item is for the RepeaterImages field
+			$r_field = $r_page->getForField();
+			if($r_field->name != $field->name) return;
+			// Get the image to use for the thumbnail
+			$image = $r_page->getFormatted($image_field->name);
+			if($image instanceof Pageimages) $image = $image->first();
+			// Set missing image thumbnail if no image exists
+			$img_src = $image ? $image->height(260)->url : $this->wire('config')->urls->$this . 'missing-image.svg';
+			// Get thumbnail height setting or default height if not defined
+			$thumb_height = $field->ri_thumbnail_height ?: $this->default_thumbnail_height;
+			// Thumbnail markup
+			$thumbnail_markup = "<div class='repeater-image-thumb'><img src='$img_src' alt='' style='height:{$thumb_height}px;'></div>";
+			// Set label
+			$fieldset->label = "$thumbnail_markup<span class='repeater-image-label'>$fieldset->label</span>";
+		});
+
+	}
+
+	/**
+	 * Modify Image upload inputfield in Page Edit
+	 *
+	 * @param HookEvent $event
+	 */
+	protected function modifyImageInputfield(HookEvent $event) {
+		$field = $event->object;
+		$page = $event->arguments(0);
+		/* @var InputfieldImage $inputfield */
+		$inputfield = $event->return;
+		// Get any RepeaterImages fields on the page that have the image uploads feature activated
+		$ri_fields = $page->fields->find('repeater_images=1, ri_image_uploads=1');
+		// Return if none
+		if(!$ri_fields->count) return;
+		foreach($ri_fields as $ri_field) {
+			// If this is an image upload field then remove any max files limit
+			if($ri_field->ri_image_field !== $field->name) continue;
+			$inputfield->maxFiles = 0;
+		}
+	}
+
+	/**
+	 * Before page save
+	 *
+	 * @param HookEvent $event
+	 */
+	protected function beforePageSave(HookEvent $event) {
+		$page = $event->arguments(0);
+		if(!$page->id) return;
+		// Get any RepeaterImages fields on the page that have the image uploads feature activated
+		$ri_fields = $page->fields->find('repeater_images=1, ri_image_uploads=1');
+		// Return if none
+		if(!$ri_fields->count) return;
+		// For each RepeaterImages field
+		foreach($ri_fields as $ri_field) {
+			$ri_field_name = $ri_field->name;
+			$image_field_name = $ri_field->ri_image_field;
+			if(!$image_field_name || !$page->$image_field_name) continue;
+			// For each Pageimage in the image upload field
+			foreach($page->$image_field_name as $pageimage) {
+				// Add a Repeater page for the image
+				/* @var RepeaterPage $ri_page */
+				$ri_page = $page->$ri_field_name->getNew();
+				$ri_page->save();
+				$ri_page->$image_field_name->add($pageimage);
+				$ri_page->save();
+				$page->$ri_field_name->add($ri_page);
+			}
+			// Remove all the uploaded images from the upload field
+			$page->$image_field_name->removeAll();
+		}
+	}
+
+
+	/**
+	 * Add config inputfields
+	 *
+	 * @param HookEvent $event
+	 */
+	protected function addConfigInputfields(HookEvent $event) {
+		$field = $event->arguments(0);
+		// Only for normal Repeater fields
+		if($field->type != 'FieldtypeRepeater') return;
+		/* @var InputfieldWrapper $wrapper */
+		$wrapper = $event->return;
+		$modules = $this->wire('modules');
+
+		/* @var InputfieldFieldset $fs */
+		$fs = $modules->InputfieldFieldset;
+		$fs->name = 'repeater_images_config';
+		$fs->label = $this->_('RepeaterImages');
+		$fs->icon = 'picture-o';
+		if(!$field->repeater_images) $fs->collapsed = Inputfield::collapsedYes;
+
+		/* @var InputfieldCheckbox $f */
+		$f = $modules->InputfieldCheckbox;
+		$f_name = 'repeater_images';
+		$f->name = $f_name;
+		$f->label = $this->_('Activate RepeaterImages for this Repeater field');
+		$f->checked = $field->$f_name === 1 ? 'checked' : '';
+		$f->columnWidth = 33;
+		$fs->add($f);
+
+		/* @var InputfieldSelect $f */
+		$f = $modules->InputfieldSelect;
+		$f_name = 'ri_image_field';
+		$f->name = $f_name;
+		$f->label = $this->_('Image field within Repeater');
+		$f->notes = $this->_('Save the Repeater field settings to see newly added Image fields in this select.');
+		if(!empty($field->repeaterFields)) {
+			foreach($field->repeaterFields as $field_id) {
+				$rf = $this->wire('fields')->get($field_id);
+				if($rf->type instanceof FieldtypeImage) {
+					$f->addOption($rf->name, $rf->name);
+				}
+			}
+		}
+		$f->value = $field->$f_name;
+		$f->columnWidth = 33;
+		$f->showIf = 'repeater_images=1';
+		$f->required = true;
+		$f->requiredIf = 'repeater_images=1';
+		$fs->add($f);
+
+		/* @var InputfieldInteger $f */
+		$f = $modules->InputfieldInteger;
+		$f_name = 'ri_thumbnail_height';
+		$f->name = $f_name;
+		$f->label = $this->_('Image thumbnail height in pixels');
+		$f->inputType = 'number';
+		$f->value = $field->$f_name ?: $this->default_thumbnail_height;
+		$f->columnWidth = 34;
+		$f->showIf = 'repeater_images=1';
+		$fs->add($f);
+
+		/* @var InputfieldCheckbox $f */
+		$f = $modules->InputfieldCheckbox;
+		$f_name = 'ri_image_uploads';
+		$f->name = $f_name;
+		$f->label = $this->_('Activate image uploads to Repeater items feature');
+		$f->label2 = $this->_('Activate image uploads');
+		$f->description = $this->_('To use this feature you must add the image field selected above to the template of the page containing the RepeaterImages field - immediately above or below the RepeaterImages field would be a good position. Then when this feature is activated each image uploaded to the field will be added as a new Repeater item to the RepeaterImages field when the page is saved, and all images will be deleted from the upload field.');
+		$f->checked = $field->$f_name === 1 ? 'checked' : '';
+		$f->showIf = 'repeater_images=1';
+		$fs->add($f);
+
+		$wrapper->add($fs);
+
+	}
+
+}
