@@ -33,7 +33,7 @@ There is a checkbox to activate image uploads. This feature allows users to quic
 
 To use this feature you must add the image field selected in the Repeater Images config to the template of the page containing the Repeater Images field - immediately above or below the Repeater Images field would be a good position.
 
-It's recommended to set the label for this field in template context to "Upload images" or similar, and set the visibility of the field to "Closed" so that it takes up less room when it's not being used. Note that when you drag images to a closed Images field and it will [automatically open](https://processwire.com/blog/posts/processwire-3.0.119-and-new-site-updates/#auto-opening-file-image-fields). You don't need to worry about the "Maximum files allowed" setting because the Repeater Images module overrides this for the upload field.
+It's recommended to set the label for this field in template context to "Upload images" or similar, and set the visibility of the field to "Closed" so that it takes up less room when it's not being used. Note that when you drag images to a closed Images field it will [automatically open](https://processwire.com/blog/posts/processwire-3.0.119-and-new-site-updates/#auto-opening-file-image-fields). You don't need to worry about the "Maximum files allowed" setting because the Repeater Images module overrides this for the upload field.
 
 New Repeater items will be created from the images uploaded to the upload field when the page is saved. The user can add descriptions and tags to the images while they are still in the upload field and these will be retained in the Repeater items. Images are automatically deleted from the upload field when the page is saved.
 
