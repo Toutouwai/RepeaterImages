@@ -24,7 +24,7 @@ class RepeaterImages extends WireData implements Module {
 		return array(
 			'title' => 'Repeater Images',
 			'summary' => 'Adds options to modify Repeater fields to make them convenient for "page-per-image" usage.',
-			'version' => '0.1.0',
+			'version' => '0.1.1',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/RepeaterImages',
 			'icon' => 'picture-o',
@@ -129,6 +129,7 @@ class RepeaterImages extends WireData implements Module {
 	protected function modifyImageInputfield(HookEvent $event) {
 		$field = $event->object;
 		$page = $event->arguments(0);
+		if(!$page || !$page->id) return;
 		/* @var InputfieldImage $inputfield */
 		$inputfield = $event->return;
 		// Get any RepeaterImages fields on the page that have the image uploads feature activated
