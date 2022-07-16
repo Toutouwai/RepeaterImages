@@ -110,7 +110,9 @@ class RepeaterImages extends WireData implements Module {
 			$image = $r_page->getFormatted($image_field->name);
 			if($image instanceof Pageimages) $image = $image->first();
 			// Set missing image thumbnail if no image exists
-			$img_src = $image ? $image->height(260)->url : $this->wire('config')->urls->$this . 'missing-image.svg';
+			$img_src = $image instanceof Pageimage 
+				? $image->height(260)->url() . '?nc=' . $image->filemtime() 
+				: $this->wire('config')->urls->$this . 'missing-image.svg';
 			// Get thumbnail height setting or default height if not defined
 			$thumb_height = $field->ri_thumbnail_height ?: $this->default_thumbnail_height;
 			// Thumbnail markup
